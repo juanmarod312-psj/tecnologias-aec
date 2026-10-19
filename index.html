@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tecnologías emergentes en AEC | Modelado Hidrológico en México</title>
+  <style>
+    :root {
+      --bg-main: #f4f7f9;
+      --bg-card: #ffffff;
+      --bg-subtle: #e9eff5;
+      --text-primary: #1a2530;
+      --text-secondary: #4a5a6a;
+      --text-muted: #6c7d8c;
+      --accent-primary: #0f4c81;
+      --accent-hover: #09345a;
+      --accent-teal: #0d7a7f;
+      --border-color: #d4dfe8;
+      --badge-fact-bg: #e3f2fd;
+      --badge-fact-txt: #0d47a1;
+      --badge-inf-bg: #fff8e1;
+      --badge-inf-txt: #8d6e00;
+      --badge-prop-bg: #e8f5e9;
+      --badge-prop-txt: #1b5e20;
+      --badge-warn-bg: #ffebee;
+      --badge-warn-txt: #b71c1c;
+      --badge-neutral-bg: #eceff1;
+      --badge-neutral-txt: #37474f;
+      --shadow-sm: 0 2px 6px rgba(15, 76, 129, 0.06);
+      --shadow-md: 0 6px 16px rgba(15, 76, 129, 0.1);
+      --radius: 8px;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding-bottom: 4rem;
+    }
+
+    a {
+      color: var(--accent-primary);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    a:hover, a:focus {
+      color: var(--accent-hover);
+    }
+
+    /* Accesibilidad: Foco por teclado */
+    :focus-visible {
+      outline: 3px solid var(--accent-teal);
+      outline-offset: 2px;
+    }
+
+    /* Encabezado */
+    header {
+      background: linear-gradient(135deg, #0a2e4d 0%, #0f4c81 60%, #0d7a7f 100%);
+      color: #ffffff;
+      padding: 2.2rem 1.5rem;
+      border-bottom: 4px solid #09345a;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .header-title h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+
+    .header-title p {
+      font-size: 1rem;
+      color: #d8e6f3;
+      max-width: 780px;
+    }
+
+    .header-meta {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      color: #eef5fb;
+      min-width: 240px;
+    }
+
+    /* Barra de Navegación Rápida */
+    nav.quick-nav {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-list {
+      display: flex;
+      flex-wrap: wrap;
+      list-style: none;
+      gap: 0.25rem;
+      padding: 0.6rem 1.5rem;
+      max-width: 1240px;
+      margin: 0 auto;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-links a:hover {
+      background: var(--bg-subtle);
+      color: var(--accent-primary);
+    }
+
+    .compare-status-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      background: var(--bg-subtle);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    /* Secciones Principales */
+    main {
+      padding: 1.5rem;
+    }
+
+    section.panel-section {
+      margin-bottom: 2.75rem;
+      scroll-margin-top: 4.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1.25rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 0.5rem;
+      gap: 0.75rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.4rem;
+      color: var(--accent-primary);
+    }
+
+    .section-header p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* Grilla Epistemológica (Inicio) */
+    .epistemic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .epistemic-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      border: 1px solid var(--border-color);
+      border-top-width: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .epistemic-card.fact { border-top-color: #1565c0; }
+    .epistemic-card.inference { border-top-color: #f9a825; }
+    .epistemic-card.proposal { border-top-color: #2e7d32; }
+    .epistemic-card.unknown { border-top-color: #c62828; }
+
+    .epistemic-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .epistemic-card ul {
+      padding-left: 1.2rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .epistemic-card li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Etiquetas (Badges) */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .badge-fact { background: var(--badge-fact-bg); color: var(--badge-fact-txt); }
+    .badge-inf { background: var(--badge-inf-bg); color: var(--badge-inf-txt); }
+    .badge-prop { background: var(--badge-prop-bg); color: var(--badge-prop-txt); }
+    .badge-warn { background: var(--badge-warn-bg); color: var(--badge-warn-txt); }
+    .badge-neutral { background: var(--badge-neutral-bg); color: var(--badge-neutral-txt); }
+
+    /* Controles de Búsqueda y Filtrado */
+    .filter-bar {
+      background: var(--bg-card);
+      padding: 1.25rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.25rem;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+      align-items: end;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .filter-group label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .filter-group input,
+    .filter-group select {
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background-color: #fff;
+      color: var(--text-primary);
+    }
+
+    .filter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--bg-subtle);
+      gap: 0.75rem;
+    }
+
+    .btn {
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.5rem 0.9rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--bg-subtle);
+      border-color: #b0c4d8;
+    }
+
+    .btn-primary {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border-color: var(--accent-primary);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Tarjetas de Tecnologías */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .tech-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .tech-card.selected-compare {
+      border: 2px solid var(--accent-teal);
+      box-shadow: var(--shadow-md);
+    }
+
+    .tech-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .tech-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+    }
+
+    .compare-checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--bg-subtle);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .compare-checkbox-label input {
+      cursor: pointer;
+    }
+
+    .tech-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .tech-summary {
+      font-size: 0.92rem;
+      margin-bottom: 0.9rem;
+      color: var(--text-primary);
+    }
+
+    .tech-problem-box {
+      background: var(--bg-subtle);
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      margin-bottom: 0.9rem;
+    }
+
+    /* Detalles colapsables dentro de cada ficha */
+    details.tech-details {
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.75rem;
+      margin-top: auto;
+    }
+
+    details.tech-details summary {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--accent-teal);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.25rem 0;
+    }
+
+    details.tech-details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.tech-details summary::after {
+      content: "▼ Abrir ficha técnica";
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    details.tech-details[open] summary::after {
+      content: "▲ Cerrar ficha";
+    }
+
+    .details-content {
+      margin-top: 0.85rem;
+      font-size: 0.86rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      color: var(--text-secondary);
+    }
+
+    .details-block {
+      border-left: 3px solid var(--border-color);
+      padding-left: 0.65rem;
+    }
+
+    .details-block strong {
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    .source-box {
+      background: #f8fafc;
+      border: 1px dashed var(--border-color);
+      padding: 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+
+    /* Estado Vacío */
+    .empty-state {
+      background: var(--bg-card);
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      display: none;
+    }
+
+    .empty-state h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .empty-state p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    /* Comparador Lado a Lado */
+    .compare-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+    }
+
+    table.compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 680px;
+      font-size: 0.88rem;
+    }
+
+    table.compare-table th,
+    table.compare-table td {
+      border: 1px solid var(--border-color);
+      padding: 0.85rem;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    table.compare-table th {
+      background: var(--bg-subtle);
+      color: var(--accent-primary);
+      font-weight: 700;
+      width: 22%;
+    }
+
+    table.compare-table th.row-label {
+      width: 16%;
+      color: var(--text-primary);
+      background: #f8fafc;
+    }
+
+    /* Tarjetas de Pilotos */
+    .pilots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .pilot-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-top: 4px solid var(--accent-teal);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .pilot-card h3 {
+      font-size: 1.1rem;
+      color: var(--accent-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .pilot-meta {
+      font-size: 0.85rem;
+      background: var(--bg-subtle);
+      padding: 0.65rem;
+      border-radius: 6px;
+      margin-bottom: 0.85rem;
+    }
+
+    .pilot-steps {
+      padding-left: 1.2rem;
+      font-size: 0.88rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .pilot-steps li {
+      margin-bottom: 0.35rem;
+    }
+
+    .pilot-limit {
+      background: var(--badge-warn-bg);
+      color: var(--badge-warn-txt);
+      padding: 0.65rem;
+      border-radius: 6px;
+      font-size: 0.83rem;
+    }
+
+    /* Glosario y Auditoría */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .glossary-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+
+    .glossary-item dt {
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin-bottom: 0.3rem;
+      font-size: 0.95rem;
+    }
+
+    .glossary-item dd {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    /* Notificación Flotante (Toast) */
+    #toast-alert {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: #b71c1c;
+      color: #ffffff;
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: none;
+      z-index: 999;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .tech-grid, .pilots-grid {
+        grid-template-columns: 1fr;
+      }
+      .header-title h1 {
+        font-size: 1.45rem;
+      }
+      .nav-list {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    @media print {
+      nav.quick-nav, .filter-bar, .compare-checkbox-label, .btn {
+        display: none !important;
+      }
+      body {
+        background: #fff;
+      }
+      .tech-card, .pilot-card, .epistemic-card {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-top">
+      <div class="header-title">
+        <h1>Tecnologías emergentes en AEC</h1>
+        <p>Panel didáctico de decisión para reducir retrabajos de análisis en modelos hidrológicos e hidráulicos de inundaciones en una consultoría en México.</p>
+      </div>
+      <div class="header-meta">
+        <div><strong>Caso de estudio:</strong> Consultoría Hidrológica (México)</div>
+        <div><strong>Fecha de corte documental:</strong> Octubre 2026</div>
+        <div><strong>Criterio metodológico:</strong> Evidencia auditada sin extrapolación</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="quick-nav" aria-label="Navegación de secciones">
+    <div class="nav-list">
+      <div class="nav-links">
+        <a href="#hallazgos">1. Hallazgos y Epistemología</a>
+        <a href="#explorador">2. Explorador de 8 Tecnologías</a>
+        <a href="#comparador">3. Comparador (Máx. 3)</a>
+        <a href="#pilotos">4. Pilotos Propuestos</a>
+        <a href="#glosario">5. Glosario y Fuentes</a>
+      </div>
+      <div class="compare-status-bar" aria-live="polite">
+        <span id="compare-counter">Seleccionadas para comparar: 0 / 3</span>
+        <button type="button" class="btn" id="btn-clear-compare" style="padding: 0.2rem 0.55rem; font-size: 0.78rem;">Limpiar</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- SECCIÓN 1: INICIO CON HALLAZGOS Y SEPARACIÓN EPISTEMOLÓGICA -->
+    <section id="hallazgos" class="panel-section">
+      <div class="section-header">
+        <h2>1. Diagnóstico y Separación Epistemológica</h2>
+        <p>Distinción estricta entre hechos documentados, inferencias técnicas, propuestas para el despacho y datos pendientes de validación.</p>
+      </div>
+
+      <div class="epistemic-grid" id="epistemic-container">
+        <!-- Renderizado dinámico desde APP_DATA -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: BUSCADOR, FILTROS Y FICHAS EXPLICATIVAS -->
+    <section id="explorador" class="panel-section">
+      <div class="section-header">
+        <h2>2. Explorador de las 8 Tecnologías Emergentes en AEC</h2>
+        <p>Filtra por palabra clave, etapa del proyecto, nivel de adopción en México o relevancia para reducir retrabajos de software.</p>
+      </div>
+
+      <div class="filter-bar" role="region" aria-label="Filtros de tecnologías">
+        <div class="filter-grid">
+          <div class="filter-group">
+            <label for="search-input">Buscar término (ej. Manning, dron, HEC-RAS, puente)</label>
+            <input type="search" id="search-input" placeholder="Escribe para filtrar en vivo..." autocomplete="off">
+          </div>
+          <div class="filter-group">
+            <label for="filter-tech">Tecnología específica</label>
+            <select id="filter-tech">
+              <option value="ALL">Todas las tecnologías (8)</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-stage">Etapa del proyecto</label>
+            <select id="filter-stage">
+              <option value="ALL">Todas las etapas</option>
+              <option value="Fase 1">Fase 1: Gabinete / Diagnóstico / Topografía</option>
+              <option value="Fase 2">Fase 2: Diseño constructivo / Obra física</option>
+              <option value="Fase 3">Fase 3: Operación y Monitoreo continuo</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-adoption">Evidencia de adopción en México</label>
+            <select id="filter-adoption">
+              <option value="ALL">Todos los niveles de evidencia</option>
+              <option value="Uso real">Uso real documentado (en su nicho)</option>
+              <option value="Piloto / Informal">Pilotos / Uso informal o académico</option>
+              <option value="Sin evidencia en hidrología">Sin evidencia comercial en hidrología</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-actions">
+          <div id="results-count" aria-live="polite" style="font-size: 0.88rem; font-weight: 700; color: var(--text-secondary);">
+            Mostrando 8 de 8 tecnologías
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button type="button" class="btn" id="btn-expand-all">Expandir todos los detalles</button>
+            <button type="button" class="btn" id="btn-collapse-all">Contraer todos los detalles</button>
+            <button type="button" class="btn btn-primary" id="btn-reset-filters">Restablecer filtros</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado vacío cuando ningún filtro coincide -->
+      <div id="empty-state" class="empty-state" role="status">
+        <h3>No se encontraron tecnologías con esos criterios</h3>
+        <p>Intenta borrar el texto de búsqueda o cambiar los filtros desplegables para volver a ver las 8 fichas técnicas.</p>
+        <button type="button" class="btn btn-primary" id="btn-empty-reset">Mostrar las 8 tecnologías</button>
+      </div>
+
+      <!-- Contenedor de fichas -->
+      <div class="tech-grid" id="tech-cards-container">
+        <!-- Renderizado dinámico desde APP_DATA -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN 3: COMPARADOR DE HASTA 3 TECNOLOGÍAS -->
+    <section id="comparador" class="panel-section">
+      <div class="section-header">
+        <h2>3. Comparación Directa (Hasta 3 Tecnologías)</h2>
+        <p>Marca la casilla "Comparar" en hasta tres fichas superiores. Se contrastan hechos técnicos y evidencia sin puntuaciones arbitrarias.</p>
+      </div>
+
+      <div class="compare-container" id="compare-wrapper">
+        <!-- Renderizado dinámico de la tabla comparativa -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4: TRES PILOTOS PROPUESTOS -->
+    <section id="pilotos" class="panel-section">
+      <div class="section-header">
+        <h2>4. Tres Proyectos Piloto Propuestos para la Consultoría</h2>
+        <p>Propuestas de bajo riesgo estructuradas sobre casos de control históricos cerrados. Los porcentajes de ahorro requieren validación empírica.</p>
+      </div>
+
+      <div class="pilots-grid" id="pilots-container">
+        <!-- Renderizado dinámico desde APP_DATA -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN 5: GLOSARIO Y FUENTES PRIMARIAS -->
+    <section id="glosario" class="panel-section">
+      <div class="section-header">
+        <h2>5. Glosario para Principiantes y Fuentes Verificadas</h2>
+        <p>Conceptos esenciales explicados en lenguaje sencillo y enlaces directos a las fuentes documentales conservadas.</p>
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label for="glossary-search" style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.35rem;">Filtrar término en el glosario:</label>
+        <input type="search" id="glossary-search" placeholder="Buscar concepto (ej. BIM, Gemelo, Manning)..." style="padding: 0.5rem 0.75rem; width: 100%; max-width: 420px; border: 1px solid var(--border-color); border-radius: 6px;">
+      </div>
+
+      <dl class="glossary-grid" id="glossary-container" style="margin-bottom: 2.5rem;">
+        <!-- Renderizado dinámico desde APP_DATA -->
+      </dl>
+
+      <div class="section-header">
+        <h3>Referencias Documentales y Notas de Auditoría</h3>
+      </div>
+      <div id="references-container" style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius); border: 1px solid var(--border-color);">
+        <!-- Renderizado dinámico desde APP_DATA -->
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast-alert" role="alert" aria-live="assertive"></div>
+
+  <footer>
+    <p>Panel Didáctico de Tecnologías Emergentes en AEC — Basado en la investigación auditada (<code>investigacion.md</code>). Sin dependencias externas.</p>
+  </footer>
+
+  <!-- =========================================================================
+       SECCIÓN DE DATOS EDITABLE (APP_DATA)
+       Para actualizar textos, agregar fuentes o ajustar pilotos, edita únicamente
+       este objeto JSON sin necesidad de modificar las funciones de renderizado.
+       ========================================================================= -->
+  <script>
+    const APP_DATA = {
+      epistemology: {
+        facts: [
+          "La preparación e ingesta de datos espaciales y tabulares constituye una carga horaria crítica en modelos hidrológicos e hidráulicos.",
+          "La robótica pesada, la fabricación aditiva y los materiales de bajo carbono operan en obra o manufactura, sin mecanismos directos para abatir retrabajos de software en gabinete.",
+          "Los organismos revisores en México (como CONAGUA y Protección Civil) exigen trazabilidad de cada parámetro de rugosidad y lluvia de diseño, descartando modelos tipo 'caja negra'.",
+          "En 2024, el 81.7% de la población de 6 años o más en México utilizó teléfono celular (98.6 millones de personas, ENDUTIH 2024 - INEGI), indicador de telefonía personal y no de cobertura industrial M2M en cauces."
+        ],
+        inferences: [
+          "El uso supervisado de agentes de código y segmentación por visión artificial puede disminuir tiempos muertos de preprocesamiento y elevar la competitividad del despacho.",
+          "Los gemelos digitales de cuenca abierta seguirán siendo marginales en consultoría privada mexicana mientras los gobiernos no liciten contratos plurianuales de monitoreo e instrumentación."
+        ],
+        proposals: [
+          "Priorizar los recursos de prueba en tecnologías de gabinete (Piloto 1: Scripts con IA, Piloto 2: Visión Artificial y Piloto 3: Enlace BIM-GIS) sobre un caso histórico ya cerrado.",
+          "Instaurar una regla obligatoria de 'Auditor Técnico' (Human-in-the-Loop): ningún parámetro hidrológico generado por código o visión artificial se ingresa al modelo final sin firma del especialista."
+        ],
+        unknowns: [
+          "Porcentaje nacional exacto de consultoras de ingeniería civil en México que usan IA generativa o flujos BIM-GIS de forma institucionalizada [Requiere validación].",
+          "Tiempo real ahorrado por visión artificial frente al uso de cartas preexistentes (Serie VII de INEGI / CONABIO) en cuencas rurales mexicanas [Requiere validación en piloto].",
+          "Porcentaje exacto de horas-hombre invertidas en limpieza de datos dentro de la consultoría específica (estimaciones informales de 40%–60% requieren cronometraje interno)."
+        ]
+      },
+
+      technologies: [
+        {
+          id: "ia-agentes",
+          name: "1. IA Generativa y Agentes de Código",
+          stageFilter: "Fase 1",
+          stageLabel: "Fase 1: Planeación, diagnóstico hidrológico y gabinete",
+          adoptionFilter: "Piloto / Informal",
+          adoptionLabel: "Piloto / Uso individual informal en México",
+          reworkImpact: "Directa (Alta en gabinete)",
+          verdict: "Candidata para Piloto 1",
+          verdictType: "prop",
+          whatIsIt: "Modelos de lenguaje y agentes de programación capaces de redactar scripts ejecutables (Python, R, SQL) y estructurar datos tabulares o vectoriales.",
+          howItWorks: "El hidrólogo describe la regla de transformación; el agente escribe código con librerías geoespaciales (GeoPandas, Rasterio, Shapely) para recortar modelos de elevación, formatear hietogramas o preparar geometrías para HEC-RAS y EPA-SWMM.",
+          problemSolved: "Retrabajo manual por conversión de proyecciones cartográficas, limpieza repetitiva de tablas climatológicas y errores de sintaxis en archivos geométricos.",
+          appliedExample: "Generación asistida de un script en Python para automatizar el recorte de rásters topográficos y la asignación tabular de curvas IDF en subcuencas.",
+          documentedAdoption: {
+            global: "Uso comercial y experimental extendido en desarrollo de software. Nota de auditoría: cifras divulgadas por portales como Glorium Tech / CMO Survey (78% de adopción empresarial y 14% de productividad, 2024–2026) miden empresas tecnológicas y mercadotecnia general, por lo que no deben extrapolarse como tasa de adopción en ingeniería hidráulica.",
+            latam: "Intención y uso individual ad-hoc por parte de modeladores jóvenes para depurar scripts; sin estandarización corporativa documentada.",
+            mexico: "Uso informal en consultorías y centros académicos (UNAM, IMTA) para procesar bases de CONAGUA. Porcentaje nacional en despachos civiles: No se tiene claro [Requiere validación]."
+          },
+          opportunities: "Automatización rápida de rutinas repetitivas sin requerir programadores de tiempo completo; trazabilidad del código fuente.",
+          barriers: "Alucinaciones lógicas en código; restricciones de confidencialidad al subir datos de clientes a nubes públicas.",
+          requirements: "Ingeniero con criterio hidrológico para auditar el código línea por línea; entorno local de Python; cuentas con privacidad empresarial.",
+          limitsAndRisks: "Riesgo crítico de aceptar conversiones de unidades erróneas o parámetros físicos inventados si no se audita el script contra el caso de control.",
+          sourceName: "Fortune Business Insights (Reporte de proveedor/mercado) & Glorium Tech (Nota auditada)",
+          sourceDate: "2025–2026",
+          sourceScope: "Global (Mercado de software e IA empresarial)",
+          sourceUrl: "https://www.fortunebusinessinsights.com/generative-ai-in-industrial-design-market-118516"
+        },
+        {
+          id: "vision-artificial",
+          name: "2. Visión Artificial (Computer Vision)",
+          stageFilter: "Fase 1",
+          stageLabel: "Fase 1: Caracterización física y escorrentía",
+          adoptionFilter: "Piloto / Informal",
+          adoptionLabel: "Académica y módulos comerciales de drones",
+          reworkImpact: "Directa (Media-Alta en gabinete)",
+          verdict: "Candidata para Piloto 2",
+          verdictType: "prop",
+          whatIsIt: "Algoritmos de aprendizaje profundo (redes neuronales convolucionales y segmentación semántica) que identifican y delimitan objetos y texturas en imágenes.",
+          howItWorks: "Procesa ortomosaicos de dron o imágenes satelitales para clasificar polígonos de asfalto, techumbres, vegetación densa, suelo desnudo y cuerpos de agua.",
+          problemSolved: "Semanas de digitalización manual trazando polígonos a mano sobre fotografías aéreas para asignar coeficientes de rugosidad de Manning o Número de Curva (CN).",
+          appliedExample: "Segmentación automática de áreas impermeables en una subcuenca periurbana para transferir el mapa de rugosidades a la malla 2D de HEC-RAS.",
+          documentedAdoption: {
+            global: "Uso real comercial integrado en plataformas SIG (ArcGIS GeoAI, plugins de QGIS con SAM de Meta) y agencias espaciales.",
+            latam: "Pilotos académicos y gubernamentales para mapeo de riberas y susceptibilidad a deslizamientos en Brasil y Colombia.",
+            mexico: "Investigación aplicada en UNAM/IMTA y uso mediante software fotogramétrico comercial (Pix4D, DJI Terra). Tasa de uso en despachos medianos: No se tiene claro [Requiere validación]."
+          },
+          opportunities: "Homologar el criterio de clasificación de uso de suelo entre distintos analistas y acelerar la discretización espacial.",
+          barriers: "Sensibilidad a sombras de edificios o nubes; diferencias estacionales en la vegetación (estiaje vs. temporada de lluvias).",
+          requirements: "Equipo con tarjeta gráfica dedicada (GPU) o entorno en la nube; ortofotos georreferenciadas de alta resolución.",
+          limitsAndRisks: "Las sombras en cañadas o taludes suelen clasificarse falsamente como espejos de agua, alterando el tirante si no hay supervisión humana en los bordes del cauce.",
+          sourceName: "MDPI Remote Sensing (Literatura científica revisada por pares)",
+          sourceDate: "2025–2026",
+          sourceScope: "Global (Teledetección e hidrología espacial)",
+          sourceUrl: "https://www.mdpi.com/2072-4292/18/5/685"
+        },
+        {
+          id: "gemelos-digitales",
+          name: "3. Gemelos Digitales (Digital Twins)",
+          stageFilter: "Fase 3",
+          stageLabel: "Fase 3: Operación, alerta temprana y mantenimiento",
+          adoptionFilter: "Sin evidencia en hidrología",
+          adoptionLabel: "Intención gremial; sin uso comercial en cuencas MX",
+          reworkImpact: "Indirecta / Nula en estudios puntuales",
+          verdict: "Descartada para corto plazo",
+          verdictType: "neutral",
+          whatIsIt: "Réplica virtual tridimensional de una cuenca o red hidráulica enlazada de forma continua con sensores físicos que actualizan su estado en tiempo casi real.",
+          howItWorks: "Conecta modelos BIM/GIS e hidrodinámicos con telemetría de lluvia y niveles hidrométricos para simular escenarios predictivos durante tormentas activas.",
+          problemSolved: "Obsolescencia de estudios estáticos en PDF e incapacidad de simular maniobras operativas de compuertas o vasos reguladores en tiempo real.",
+          appliedExample: "Plataforma digital de resiliencia vial e inundaciones acoplada a radares meteorológicos para cierres preventivos de pasos a desnivel.",
+          documentedAdoption: {
+            global: "Pilotos de investigación avanzada y proyectos gubernamentales en EE. UU., Europa y Asia para resiliencia de redes viales y cuencas.",
+            latam: "Intención de adopción y pilotos conceptuales en infraestructura mayor en Chile, Colombia y Brasil.",
+            mexico: "Promoción en foros de edificación vertical (CMIC BIM Forum México). En consultoría privada para estudios de inundación de cuenca abierta: No se tiene evidencia de uso comercial activo."
+          },
+          opportunities: "Evolucionar el modelo de negocio del despacho hacia contratos de monitoreo continuo como servicio.",
+          barriers: "Altísimo costo de licenciamiento e instrumentación; fragmentación institucional de datos entre municipios y federación.",
+          requirements: "Red de sensores operando 24/7, servidores en la nube de alto desempeño y contratos de operación a largo plazo.",
+          limitsAndRisks: "No resuelve el retrabajo de gabinete en estudios de factibilidad convencionales; riesgo de construir maquetas 3D costosas sin sustento hidrométrico en campo.",
+          sourceName: "ASCE Library & CMIC CDMX (BIM Forum México)",
+          sourceDate: "2025–2026",
+          sourceScope: "Global (ASCE) y México (CMIC - Sector Construcción)",
+          sourceUrl: "https://ascelibrary.org/doi/10.1061/JMENEA.MEENG-7046"
+        },
+        {
+          id: "iot-sensores",
+          name: "4. Internet de las Cosas (IoT Hidrométrico)",
+          stageFilter: "Fase 3",
+          stageLabel: "Fase 1 y 3: Datos de calibración y monitoreo en campo",
+          adoptionFilter: "Uso real",
+          adoptionLabel: "Uso gubernamental; condicionado a contrato en privadas",
+          reworkImpact: "Indirecta (Provee datos de campo, no automatiza software)",
+          verdict: "Descartada para gabinete (Condicionada a cliente)",
+          verdictType: "inf",
+          whatIsIt: "Redes de sensores físicos (limnímetros ultrasónicos/radar, pluviómetros de balancín) que transmiten mediciones continuas vía celular, radio LoRaWAN o satélite.",
+          howItWorks: "Registra tirantes de agua e intensidades de lluvia cada pocos minutos y los envía a un servidor central para contar con hidrogramas reales de tormentas.",
+          problemSolved: "Incertidumbre al calibrar modelos hidrológicos por falta de mediciones en sitio, evitando iteraciones basadas en suposiciones o marcas de agua imprecisas.",
+          appliedExample: "Instalación de sensores ultrasónicos de nivel en puentes críticos para calibrar el coeficiente de rugosidad con avenidas históricas.",
+          documentedAdoption: {
+            global: "Uso real consolidado en agencias nacionales de agua (como USGS en EE. UU. y redes europeas).",
+            latam: "Pilotos y redes municipales de alerta temprana en zonas urbanas susceptibles a inundación en Colombia y Brasil.",
+            mexico: "Uso real por organismos públicos (SMN/CONAGUA, SACMEX). Nota estadística oficial: ENDUTIH 2024 (INEGI) reporta que el 81.7% de la población de 6+ años usa teléfono celular (98.6 millones), pero la cobertura celular o LoRaWAN específica en cañadas y ríos rurales no urbanizados Requiere validación."
+          },
+          opportunities: "Calibración hidrodinámica irrefutable ante auditorías técnicas de autoridades.",
+          barriers: "Vandalismo y robo de equipos en campo, costos de mantenimiento físico y pérdida de señal en barrancas.",
+          requirements: "Presupuesto específico del cliente para compra de hardware IP68, permisos municipales de instalación y cuadrillas de mantenimiento.",
+          limitsAndRisks: "Una consultoría de gabinete no instala sensores con recursos propios si el contrato solo contempla el estudio analítico; fallas de calibración del sensor contaminan los datos.",
+          sourceName: "INEGI — Encuesta Nacional sobre Disponibilidad y Uso de Tecnologías de la Información en los Hogares (ENDUTIH 2024)",
+          sourceDate: "Publicada en mayo de 2025 (Datos 2024)",
+          sourceScope: "México (Población nacional de 6 años o más)",
+          sourceUrl: "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2025/endutih/ENDUTIH_24_RR.pdf"
+        },
+        {
+          id: "robotica-drones",
+          name: "5. Robótica (Drones UAV y Batimetría USV)",
+          stageFilter: "Fase 1",
+          stageLabel: "Fase 1: Levantamiento topobatimétrico en campo",
+          adoptionFilter: "Uso real",
+          adoptionLabel: "Drones aéreos: Uso real maduro | USV acuático: Piloto/Nicho",
+          reworkImpact: "Previa (Mejora el insumo topográfico, no el flujo de gabinete)",
+          verdict: "Mantenimiento de práctica actual (Uso en campo)",
+          verdictType: "fact",
+          whatIsIt: "Vehículos aéreos no tripulados (UAV) con sensores fotogramétricos o LiDAR, y lanchas autónomas de superficie (USV) con ecosondas para medir fondos de cauces.",
+          howItWorks: "Escanean el terreno y el lecho sumergido del río para generar nubes de puntos densas y Modelos Digitales de Terreno (MDT) de precisión centimétrica.",
+          problemSolved: "Topografías obsoletas o incompletas en cauces inaccesibles que provocan discontinuidades hidráulicas al armar la geometría del río.",
+          appliedExample: "Vuelo con dron LiDAR sobre un río con vegetación riparia densa para extraer la sección transversal real del terreno bajo los árboles.",
+          documentedAdoption: {
+            global: "Uso real masivo; estándar de la industria en topografía de infraestructura.",
+            latam: "Uso comercial consolidado en proyectos hidroeléctricos, viales y mineros.",
+            mexico: "Uso real extendido de drones aéreos en consultorías mexicanas (propios o subcontratados). Los vehículos acuáticos autónomos (USV) se mantienen en nivel de nicho especializado o piloto. No existe porcentaje censal desglosado para hidrología [Requiere validación]."
+          },
+          opportunities: "Insumos topográficos de alta fidelidad que reducen dudas sobre bordos y llanuras de inundación.",
+          barriers: "Regulación aeronáutica (AFAC), costos altos de sensores LiDAR e interferencia por lirio acuático o turbulencia en batimetría.",
+          requirements: "Pilotos acreditados, puntos de control terrestre con GPS geodésico (RTK/PPK) y estaciones para procesar nubes de puntos.",
+          limitsAndRisks: "Un mal filtrado de la nube de puntos puede borrar digitalmente un bordo o muro de contención real, induciendo desbordamientos falsos en el simulador.",
+          sourceName: "Diagnóstico técnico auditado (investigacion.md) / Práctica sectorial AEC",
+          sourceDate: "2026",
+          sourceScope: "Global y México (Consultoría topográfica e hidráulica)",
+          sourceUrl: "https://cmiccdmx.org/cmic-cdmx-anuncia-congreso-bim-forum-mexico-2025/"
+        },
+        {
+          id: "fabricacion-aditiva",
+          name: "6. Fabricación Aditiva (Impresión 3D de Concreto)",
+          stageFilter: "Fase 2",
+          stageLabel: "Fase 2: Construcción física y manufactura en obra",
+          adoptionFilter: "Sin evidencia en hidrología",
+          adoptionLabel: "Pilotos en vivienda; sin aplicación en hidrología MX",
+          reworkImpact: "Nula en análisis y modelado de gabinete",
+          verdict: "Descartada (Tecnología de obra física)",
+          verdictType: "warn",
+          whatIsIt: "Construcción automatizada mediante brazos robóticos o pórticos que depositan cordones sucesivos de mortero o concreto especializado sin usar cimbra.",
+          howItWorks: "Convierte un modelo 3D paramétrico en instrucciones de coordenadas (G-code) para extruir capas de material cementicio en sitio o en planta.",
+          problemSolved: "Tiempos y costos de cimbrado en estructuras con geometrías curvas complejas durante la etapa de construcción física.",
+          appliedExample: "Impresión experimental de elementos de disipación de energía o vivienda prototipo.",
+          documentedAdoption: {
+            global: "Pilotos y obras puntuales (puentes peatonales, mobiliario urbano y vivienda experimental en EE. UU., Europa y Medio Oriente).",
+            latam: "Proyectos piloto de vivienda social.",
+            mexico: "Piloto documentado únicamente en vivienda habitacional en Tabasco (proyecto ICON / New Story). En obras hidráulicas o reducción de retrabajos de modelado de inundaciones: Sin aplicación documentada."
+          },
+          opportunities: "Relevante únicamente para empresas constructoras o prefabricadoras que busquen moldear geometrías especiales.",
+          barriers: "Inversión de capital altísima en maquinaria robótica; ausencia de normativa mexicana (NOM/NMX) para estructuras hidráulicas impresas sometidas a abrasión.",
+          requirements: "Robots impresores de escala industrial y control reológico de mezclas cementicias.",
+          limitsAndRisks: "Inaplicable para el problema de la consultoría: no interviene en absoluto en el software de análisis hidrológico ni reduce retrabajos de cálculo.",
+          sourceName: "Auditoría técnica (investigacion.md) — Caso Tabasco vivienda vs. Hidrología",
+          sourceDate: "2026",
+          sourceScope: "México y Global",
+          sourceUrl: "https://cmiccdmx.org/cmic-cdmx-anuncia-congreso-bim-forum-mexico-2025/"
+        },
+        {
+          id: "realidad-extendida",
+          name: "7. Realidad Extendida (VR / AR / MR)",
+          stageFilter: "Fase 2",
+          stageLabel: "Fase 1 y 2: Comunicación visual y socialización",
+          adoptionFilter: "Piloto / Informal",
+          adoptionLabel: "Comercial en arquitectura; marginal en hidrología MX",
+          reworkImpact: "Negativa en gabinete (Añade pasos de exportación 3D)",
+          verdict: "Descartada (Incrementa horas de postproceso)",
+          verdictType: "warn",
+          whatIsIt: "Tecnologías de visualización inmersiva en cascos virtuales (VR) o superposición de modelos digitales sobre el mundo físico a través de pantallas (AR).",
+          howItWorks: "Toma los polígonos y tirantes de inundación calculados y los convierte en mallas tridimensionales para visualizarlos a escala 1:1 en reuniones o en sitio.",
+          problemSolved: "Dificultad de clientes no técnicos, cabildos o comunidades para interpretar planos 2D con curvas de nivel y manchas de inundación.",
+          appliedExample: "Visualización en tableta del Nivel de Aguas Máximas Extraordinarias (NAME) proyectado sobre una avenida urbana para explicar riesgos a autoridades.",
+          documentedAdoption: {
+            global: "Uso comercial en coordinación BIM de edificación (detección de colisiones de instalaciones) y recorridos arquitectónicos.",
+            latam: "Uso académico y promocional en desarrollos inmobiliarios.",
+            mexico: "Uso comercial en despachos de arquitectura e inmobiliarias; en consultoría hidrológica mexicana: No se tiene claro un uso productivo más allá de demostraciones esporádicas [Requiere validación]."
+          },
+          opportunities: "Mejorar la comunicación ejecutiva para aprobar proyectos de mitigación ante autoridades municipales.",
+          barriers: "Obliga al equipo técnico a exportar archivos científicos (.tif, .hdf) a motores de videojuegos (Unity, Unreal), sumando horas de trabajo en lugar de restarlas.",
+          requirements: "Visores VR/AR, licencias de motores gráficos y personal dedicado a modelado 3D visual.",
+          limitsAndRisks: "Contraproducente para la meta interna de reducir retrabajos analíticos: añade una capa adicional de conversión geométrica y riesgo de priorizar estética sobre rigor hidráulico.",
+          sourceName: "CMIC BIM Forum México & Auditoría técnica (investigacion.md)",
+          sourceDate: "2025–2026",
+          sourceScope: "México (Sector Edificación vs. Hidrología)",
+          sourceUrl: "https://cmiccdmx.org/cmic-cdmx-anuncia-congreso-bim-forum-mexico-2025/"
+        },
+        {
+          id: "materiales-bajo-carbono",
+          name: "8. Materiales de Bajo Carbono y Bioingeniería",
+          stageFilter: "Fase 2",
+          stageLabel: "Fase 2: Especificación de obra y construcción",
+          adoptionFilter: "Uso real",
+          adoptionLabel: "Disponible en concreteras; nulo impacto en software",
+          reworkImpact: "Nula en proceso de software (Solo cambia coeficiente n)",
+          verdict: "Descartada para optimización de análisis",
+          verdictType: "neutral",
+          whatIsIt: "Insumos constructivos con menor huella de carbono incorporada (concretos con adiciones puzolánicas/escorias) y soluciones basadas en la naturaleza (gaviones vegetados, geoceldas).",
+          howItWorks: "Sustituyen los revestimientos tradicionales de concreto armado con alto contenido de clínker o estabilizan taludes combinando elementos inertes y vegetación riparia.",
+          problemSolved: "Altas emisiones de gases de efecto invernadero (GEI) e impermeabilización severa en obras de encauzamiento y rectificación de ríos.",
+          appliedExample: "Sustitución de un canal trapecial revestido de concreto simple por geoceldas permeables vegetadas y muros de gavión en una obra de control pluvial.",
+          documentedAdoption: {
+            global: "Uso real comercial impulsado por normativas climáticas y certificaciones de infraestructura sostenible (Envision, LEED).",
+            latam: "Disponibilidad comercial en grandes cementeras con presencia regional.",
+            mexico: "Oferta comercial activa de concretos con Declaración Ambiental de Producto (EPD, ej. líneas de CEMEX y Holcim en México). En el proceso de cálculo hidrológico de gabinete: su única incidencia es cambiar el valor numérico del coeficiente de Manning y la tasa de infiltración."
+          },
+          opportunities: "Alinear los proyectos ejecutivos de la consultoría con criterios de financiamiento verde y resiliencia ecosistémica.",
+          barriers: "Resistencia de dependencias revisoras acostumbradas a catálogos convencionales de obra pública; menor familiaridad con umbrales de esfuerzo cortante permisible en bioingeniería.",
+          requirements: "Fichas técnicas de esfuerzo tractivo máximo y curvas de rugosidad variable según la altura del tirante y flexibilidad de la vegetación.",
+          limitsAndRisks: "No reduce tiempos de modelado ni retrabajos de software; si se especifica sin verificar velocidades críticas de erosión, la estructura puede fallar durante una avenida.",
+          sourceName: "Auditoría técnica (investigacion.md) — Especificación constructiva en México",
+          sourceDate: "2026",
+          sourceScope: "México y Global (Suministro de materiales)",
+          sourceUrl: "https://cmiccdmx.org/cmic-cdmx-anuncia-congreso-bim-forum-mexico-2025/"
+        }
+      ],
+
+      pilots: [
+        {
+          id: "piloto-1",
+          title: "Piloto 1: Automatización de Preprocesamiento Geoespacial con Scripts Asistidos por IA",
+          techRelated: "IA Generativa y Agentes de Código + Flujo SIG",
+          owner: "Ingeniero Hidrólogo Modelador Intermedio (supervisado por el Director Técnico).",
+          inputs: "Proyecto de inundación histórico ya cerrado y aprobado (caso de control); instalación local de Python (GeoPandas, Rasterio, Shapely); asistente de código con privacidad empresarial.",
+          steps: [
+            "Identificar las 3 tareas manuales más repetitivas del caso control (ej. reproyección de capas a ITRF08/UTM, recorte de MDE al parteaguas y formateo de tablas de lluvia).",
+            "Generar y depurar con asistencia de IA un script unificado en Python que automatice esa secuencia sin intervención manual.",
+            "Ejecutar el script con los insumos crudos originales y cronometrar el tiempo de principio a fin.",
+            "Cotejar las capas resultantes contra los archivos finales aprobados del proyecto histórico."
+          ],
+          successMetric: "Reducción verificable de horas-hombre frente a la bitácora original con 0% de discrepancia geométrica en las entradas de HEC-RAS. [El porcentaje exacto de ahorro requiere validación empírica en la prueba].",
+          limitWarning: "Prohibido permitir que el script o agente modifique autónomamente coeficientes hidrológicos (Manning, Número de Curva o infiltración). Todo parámetro físico requiere firma del especialista."
+        },
+        {
+          id: "piloto-2",
+          title: "Piloto 2: Clasificación Asistida de Coberturas para Asignación del Coeficiente de Manning",
+          techRelated: "Visión Artificial integrada en SIG (QGIS)",
+          owner: "Especialista en Sistemas de Información Geográfica (SIG) del despacho.",
+          inputs: "Ortomosaico de alta resolución (< 50 cm/píxel) de una cuenca estudiada previamente; complemento de segmentación de código abierto en QGIS; tabla normativa de coeficientes de Manning.",
+          steps: [
+            "Cargar la ortofoto del caso de control y ejecutar la segmentación automática en 5 clases básicas (vialidad/techo, pastizal, arbolado, suelo desnudo, cuerpo de agua).",
+            "Aplicar una regla de asignación tabular automática del coeficiente n de Manning a cada polígono clasificado.",
+            "Realizar inspección visual dirigida exclusivamente a los bordes del cauce principal para corregir sombras clasificadas por error como agua.",
+            "Cruzar la capa generada contra la vectorización manual original mediante una matriz de confusión espacial."
+          ],
+          successMetric: "Menor tiempo total de generación de la capa de rugosidad manteniendo concordancia espacial (índice Kappa o F1) aceptable para el revisor sénior [Umbral exacto requiere validación en el piloto].",
+          limitWarning: "En cañadas con sombras pronunciadas o nubosidad, la visión artificial produce falsos positivos; nunca se transfiere la capa directo al motor hidráulico sin inspección visual del cauce."
+        },
+        {
+          id: "piloto-3",
+          title: "Piloto 3: Enlace Automatizado BIM-GIS para Incisión de Puentes y Alcantarillas",
+          techRelated: "Interoperabilidad BIM-GIS automatizada (complemento al Piloto 1)",
+          owner: "Coordinador Hidráulico / Modelador BIM-GIS.",
+          inputs: "Modelo digital 3D de una obra de cruce (puente o alcantarilla en IFC o Civil 3D DWG) georreferenciado; Modelo Digital de Terreno (MDT) del cauce en formato ráster.",
+          steps: [
+            "Extraer programáticamente las cotas de desplante, pilas, estribos y gálibos libres desde el archivo constructivo.",
+            "Fusionar las geometrías con el MDT base mediante una rutina reproducible en QGIS/HEC-RAS sin redibujar secciones a mano.",
+            "Ejecutar la corrida hidrodinámica para el periodo de retorno de diseño (ej. Tr = 100 años).",
+            "Auditar el perfil hidráulico aguas arriba y aguas abajo del cruce para descartar saltos numéricos artificiales."
+          ],
+          successMetric: "Eliminación de retrabajos por errores de transcripción de cotas de fondo (invert) y reducción del tiempo de inserción de estructuras [Porcentaje de ahorro requiere validación].",
+          limitWarning: "Si el archivo CAD/BIM de origen viene en coordenadas arbitrarias locales (0,0) en lugar de coordenadas oficiales (ITRF08 / UTM), el flujo automatizado debe detenerse hasta que topografía corrija el origen."
+        }
+      ],
+
+      glossary: [
+        {
+          term: "AEC (Arquitectura, Ingeniería y Construcción)",
+          definition: "Sector productivo que agrupa a los profesionales encargados de planear, diseñar, calcular y construir obras civiles, edificaciones e infraestructura."
+        },
+        {
+          term: "Modelo Hidrológico vs. Modelo Hidráulico",
+          definition: "El modelo hidrológico calcula cuánta agua de lluvia escurre por una cuenca según el suelo y la pendiente (ej. HEC-HMS); el modelo hidráulico calcula por dónde se mueve esa agua, qué altura alcanza (tirante) y qué calles o terrenos inunda (ej. HEC-RAS 2D)."
+        },
+        {
+          term: "Retrabajo en Gabinete",
+          definition: "Tiempo técnico perdido en repetir cálculos, rehacer mallas o limpiar archivos debido a formatos incompatibles, errores de coordenadas o fallas de estabilidad en el software."
+        },
+        {
+          term: "Coeficiente de Rugosidad de Manning (n)",
+          definition: "Valor numérico que mide la resistencia o fricción que opone la superficie del terreno o del río al paso del agua (el concreto liso frena poco el agua; un bosque denso la frena mucho)."
+        },
+        {
+          term: "MDE / MDT (Modelo Digital de Elevación / Terreno)",
+          definition: "Archivo geográfico en cuadrícula (ráster) donde cada celda guarda la altura exacta del suelo sobre el nivel del mar. El MDT representa el suelo desnudo sin árboles ni casas."
+        },
+        {
+          term: "Visión Artificial (Computer Vision)",
+          definition: "Rama de la inteligencia artificial que permite a una computadora identificar objetos, vegetación, techos o ríos dentro de fotografías aéreas o satelitales de manera automática."
+        },
+        {
+          term: "Gemelo Digital (Digital Twin)",
+          definition: "Copia virtual de una obra o cuenca que recibe datos de sensores instalados en el sitio real para reflejar cómo está funcionando el sistema en ese mismo instante."
+        },
+        {
+          term: "BIM y SIG (GIS)",
+          definition: "BIM modela estructuras detalladas en 3D con sus materiales (puentes, tuberías); SIG analiza mapas y territorios completos (cuencas, uso de suelo). Unirlos sin perder datos es un reto clásico de ingeniería."
+        }
+      ],
+
+      references: [
+        {
+          citation: "INEGI (2025). Encuesta Nacional sobre Disponibilidad y Uso de Tecnologías de la Información en los Hogares (ENDUTIH) 2024.",
+          detail: "Fuente primaria oficial en México. Reporta 81.7% de usuarios de teléfono celular (98.6 millones de personas de 6 años o más) y 83.1% de usuarios de internet a nivel nacional (86.9% en zonas urbanas y 68.5% en rurales).",
+          type: "Fuente Primaria Oficial (México)",
+          url: "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2025/endutih/ENDUTIH_24_RR.pdf"
+        },
+        {
+          citation: "Cámara Mexicana de la Industria de la Construcción - CMIC CDMX (2025). Congreso BIM Forum México.",
+          detail: "Referencia gremial sobre intención de adopción, interoperabilidad BIM y retos de digitalización en empresas constructoras y de ingeniería en México.",
+          type: "Fuente Gremial Sectorial (México)",
+          url: "https://cmiccdmx.org/cmic-cdmx-anuncia-congreso-bim-forum-mexico-2025/"
+        },
+        {
+          citation: "American Society of Civil Engineers - ASCE Library (2025/2026). AI-Enhanced Digital Twin–Driven Flood Resilience for Roadway Networks.",
+          detail: "Literatura técnica revisada por pares sobre marcos experimentales de gemelos digitales acoplados a IA para resiliencia vial ante inundaciones.",
+          type: "Fuente Académica Primaria (Global)",
+          url: "https://ascelibrary.org/doi/10.1061/JMENEA.MEENG-7046"
+        },
+        {
+          citation: "Remote Sensing / MDPI (2026). Towards Digital Twin in Flood Forecasting with Data Assimilation.",
+          detail: "Estudio científico sobre asimilación de datos de sensores remotos y modelado hidrodinámico para pronóstico de inundaciones.",
+          type: "Fuente Académica Primaria (Global)",
+          url: "https://www.mdpi.com/2072-4292/18/5/685"
+        },
+        {
+          citation: "Fortune Business Insights (2026). Generative AI in Industrial Design Market Size & Trends (2026–2034).",
+          detail: "Reporte de mercado comercial. Útil para dimensionar la oferta de proveedores de software, pero sujeto a sesgo comercial de proveedores.",
+          type: "Reporte de Mercado / Proveedores (Global)",
+          url: "https://www.fortunebusinessinsights.com/generative-ai-in-industrial-design-market-118516"
+        },
+        {
+          citation: "Glorium Technologies / CMO Survey (2025–2026). Generative AI Statistics and Corporate Trends.",
+          detail: "Compilación secundaria empresarial. Auditada en este panel para advertir que sus porcentajes (78% adopción / 14% productividad) corresponden a servicios generales y mercadotecnia, no a despachos de hidrología.",
+          type: "Compilación Secundaria Auditada (Global)",
+          url: "https://gloriumtech.com/generative-ai-statistics-and-trends/"
+        }
+      ]
+    };
+
+    /* =========================================================================
+       LÓGICA DE LA APLICACIÓN E INTERACTIVIDAD
+       ========================================================================= */
+    const state = {
+      searchQuery: "",
+      selectedTech: "ALL",
+      selectedStage: "ALL",
+      selectedAdoption: "ALL",
+      compareList: ["ia-agentes", "vision-artificial"] // Preselección didáctica inicial de las 2 principales
+    };
+
+    // Utilidad para mostrar alertas temporales (ej. límite de 3 tecnologías)
+    function showToast(message) {
+      const toast = document.getElementById("toast-alert");
+      toast.textContent = message;
+      toast.style.display = "block";
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        toast.style.display = "none";
+      }, 3600);
+    }
+
+    // 1. Renderizar sección epistemológica
+    function renderEpistemology() {
+      const container = document.getElementById("epistemic-container");
+      const { facts, inferences, proposals, unknowns } = APP_DATA.epistemology;
+
+      const blocks = [
+        {
+          cls: "fact",
+          badge: "badge-fact",
+          label: "Hechos Comprobables",
+          items: facts
+        },
+        {
+          cls: "inference",
+          badge: "badge-inf",
+          label: "Inferencias Técnicas",
+          items: inferences
+        },
+        {
+          cls: "proposal",
+          badge: "badge-prop",
+          label: "Propuestas para el Despacho",
+          items: proposals
+        },
+        {
+          cls: "unknown",
+          badge: "badge-warn",
+          label: "Datos Desconocidos / Requiere Validación",
+          items: unknowns
+        }
+      ];
+
+      container.innerHTML = blocks.map(b => `
+        <article class="epistemic-card ${b.cls}">
+          <h3><span class="badge ${b.badge}">${b.label}</span></h3>
+          <ul>
+            ${b.items.map(item => `<li>${item}</li>`).join("")}
+          </ul>
+        </article>
+      `).join("");
+    }
+
+    // 2. Poblar el selector de tecnologías
+    function populateTechSelect() {
+      const select = document.getElementById("filter-tech");
+      APP_DATA.technologies.forEach(tech => {
+        const opt = document.createElement("option");
+        opt.value = tech.id;
+        opt.textContent = tech.name;
+        select.appendChild(opt);
+      });
+    }
+
+    // 3. Filtrar y renderizar tarjetas de tecnologías
+    function renderTechCards() {
+      const container = document.getElementById("tech-cards-container");
+      const emptyState = document.getElementById("empty-state");
+      const countEl = document.getElementById("results-count");
+
+      const q = state.searchQuery.trim().toLowerCase();
+
+      const filtered = APP_DATA.technologies.filter(t => {
+        const matchTech = state.selectedTech === "ALL" || t.id === state.selectedTech;
+        const matchStage = state.selectedStage === "ALL" || t.stageFilter === state.selectedStage;
+        const matchAdopt = state.selectedAdoption === "ALL" || t.adoptionFilter === state.selectedAdoption;
+
+        const searchableText = [
+          t.name, t.whatIsIt, t.howItWorks, t.problemSolved, t.appliedExample,
+          t.documentedAdoption.global, t.documentedAdoption.latam, t.documentedAdoption.mexico,
+          t.opportunities, t.barriers, t.requirements, t.limitsAndRisks, t.verdict
+        ].join(" ").toLowerCase();
+
+        const matchQuery = q === "" || searchableText.includes(q);
+        return matchTech && matchStage && matchAdopt && matchQuery;
+      });
+
+      countEl.textContent = `Mostrando ${filtered.length} de ${APP_DATA.technologies.length} tecnologías`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = "";
+        emptyState.style.display = "block";
+        return;
+      }
+
+      emptyState.style.display = "none";
+
+      const badgeMap = {
+        prop: "badge-prop",
+        fact: "badge-fact",
+        inf: "badge-inf",
+        warn: "badge-warn",
+        neutral: "badge-neutral"
+      };
+
+      container.innerHTML = filtered.map(t => {
+        const isSelected = state.compareList.includes(t.id);
+        const badgeClass = badgeMap[t.verdictType] || "badge-neutral";
+
+        return `
+          <article class="tech-card ${isSelected ? "selected-compare" : ""}" data-id="${t.id}">
+            <div>
+              <div class="tech-card-header">
+                <h3 class="tech-card-title">${t.name}</h3>
+                <label class="compare-checkbox-label">
+                  <input type="checkbox" class="compare-check" data-id="${t.id}" ${isSelected ? "checked" : ""} aria-label="Comparar ${t.name}">
+                  Comparar
+                </label>
+              </div>
+
+              <div class="tech-badges">
+                <span class="badge ${badgeClass}">${t.verdict}</span>
+                <span class="badge badge-neutral">${t.stageFilter}</span>
+                <span class="badge badge-fact">${t.adoptionLabel}</span>
+              </div>
+
+              <p class="tech-summary"><strong>¿Qué es?</strong> ${t.whatIsIt}</p>
+
+              <div class="tech-problem-box">
+                <div><strong>Problema que atiende:</strong> ${t.problemSolved}</div>
+                <div style="margin-top:0.35rem;"><strong>Incidencia en retrabajo de análisis:</strong> ${t.reworkImpact}</div>
+              </div>
+            </div>
+
+            <details class="tech-details">
+              <summary>Mecanismo, Evidencia Geográfica, Límites y Fuente</summary>
+              <div class="details-content">
+                <div class="details-block">
+                  <strong>¿Cómo funciona? (Mecanismo técnico)</strong>
+                  ${t.howItWorks}
+                </div>
+                <div class="details-block">
+                  <strong>Ejemplo aplicado a hidrología / inundaciones</strong>
+                  ${t.appliedExample}
+                </div>
+                <div class="details-block">
+                  <strong>Etapa del proyecto</strong>
+                  ${t.stageLabel}
+                </div>
+                <div class="details-block">
+                  <strong>Adopción documentada por alcance geográfico</strong>
+                  <ul style="padding-left: 1rem; margin-top: 0.25rem;">
+                    <li><em>Global:</em> ${t.documentedAdoption.global}</li>
+                    <li><em>Latinoamérica:</em> ${t.documentedAdoption.latam}</li>
+                    <li><em>México:</em> ${t.documentedAdoption.mexico}</li>
+                  </ul>
+                </div>
+                <div class="details-block">
+                  <strong>Oportunidades y Barreras</strong>
+                  <em>Oportunidades:</em> ${t.opportunities}<br>
+                  <em>Barreras:</em> ${t.barriers}
+                </div>
+                <div class="details-block">
+                  <strong>Requisitos operativos</strong>
+                  ${t.requirements}
+                </div>
+                <div class="details-block" style="border-left-color: #c62828;">
+                  <strong style="color: #b71c1c;">Límite operativo y Riesgos</strong>
+                  ${t.limitsAndRisks}
+                </div>
+                <div class="source-box">
+                  <strong>Fuente conservada:</strong> ${t.sourceName}<br>
+                  <strong>Fecha:</strong> ${t.sourceDate} | <strong>Alcance:</strong> ${t.sourceScope}<br>
+                  <a href="${t.sourceUrl}" target="_blank" rel="noopener noreferrer">Abrir referencia verificada ↗</a>
+                </div>
+              </div>
+            </details>
+          </article>
+        `;
+      }).join("");
+
+      // Conectar eventos de checkboxes de comparación
+      container.querySelectorAll(".compare-check").forEach(chk => {
+        chk.addEventListener("change", handleCompareToggle);
+      });
+    }
+
+    // 4. Manejo del comparador (máximo 3 tecnologías)
+    function handleCompareToggle(e) {
+      const techId = e.target.getAttribute("data-id");
+      const checked = e.target.checked;
+
+      if (checked) {
+        if (state.compareList.length >= 3) {
+          e.target.checked = false;
+          showToast("El comparador admite un máximo de 3 tecnologías al mismo tiempo. Desmarca una primero.");
+          return;
+        }
+        if (!state.compareList.includes(techId)) {
+          state.compareList.push(techId);
+        }
+      } else {
+        state.compareList = state.compareList.filter(id => id !== techId);
+      }
+
+      renderTechCards();
+      renderComparisonTable();
+    }
+
+    function renderComparisonTable() {
+      const wrapper = document.getElementById("compare-wrapper");
+      const counter = document.getElementById("compare-counter");
+      const clearBtn = document.getElementById("btn-clear-compare");
+
+      counter.textContent = `Seleccionadas para comparar: ${state.compareList.length} / 3`;
+      clearBtn.disabled = state.compareList.length === 0;
+
+      if (state.compareList.length === 0) {
+        wrapper.innerHTML = `
+          <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+            <strong>Ninguna tecnología seleccionada para comparar.</strong>
+            <p style="font-size: 0.88rem; margin-top: 0.35rem;">Marca la casilla "Comparar" en hasta 3 tarjetas del explorador superior para contrastar sus atributos lado a lado.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const selectedTechs = state.compareList.map(id => APP_DATA.technologies.find(t => t.id === id)).filter(Boolean);
+
+      const rows = [
+        { label: "Dictamen para el despacho", render: t => `<strong>${t.verdict}</strong>` },
+        { label: "Etapa del proyecto", render: t => t.stageLabel },
+        { label: "Incidencia en retrabajos de gabinete", render: t => t.reworkImpact },
+        { label: "Problema que resuelve", render: t => t.problemSolved },
+        { label: "Mecanismo técnico", render: t => t.howItWorks },
+        { label: "Ejemplo aplicado", render: t => t.appliedExample },
+        { label: "Adopción en México", render: t => t.documentedAdoption.mexico },
+        { label: "Adopción en Latinoamérica", render: t => t.documentedAdoption.latam },
+        { label: "Adopción Global", render: t => t.documentedAdoption.global },
+        { label: "Requisitos clave", render: t => t.requirements },
+        { label: "Límite y riesgo principal", render: t => t.limitsAndRisks },
+        { label: "Fuente, fecha y alcance", render: t => `${t.sourceName} (${t.sourceDate}, ${t.sourceScope}) — <a href="${t.sourceUrl}" target="_blank" rel="noopener noreferrer">Enlace ↗</a>` }
+      ];
+
+      wrapper.innerHTML = `
+        <table class="compare-table" aria-label="Tabla comparativa de tecnologías seleccionadas">
+          <thead>
+            <tr>
+              <th class="row-label">Criterio de Comparación</th>
+              ${selectedTechs.map(t => `
+                <th>
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:0.5rem;">
+                    <span>${t.name}</span>
+                    <button type="button" class="btn remove-compare-btn" data-id="${t.id}" style="padding:0.15rem 0.45rem; font-size:0.75rem;" title="Quitar de la comparación">✕</button>
+                  </div>
+                </th>
+              `).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => `
+              <tr>
+                <th class="row-label">${r.label}</th>${selectedTechs.map(t => `<td>${r.render(t)}</td>`).join("")}
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+
+      wrapper.querySelectorAll(".remove-compare-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id");
+          state.compareList = state.compareList.filter(item => item !== id);
+          renderTechCards();
+          renderComparisonTable();
+        });
+      });
+    }
+
+    // 5. Renderizar los 3 Pilotos Propuestos
+    function renderPilots() {
+      const container = document.getElementById("pilots-container");
+      container.innerHTML = APP_DATA.pilots.map(p => `
+        <article class="pilot-card">
+          <div style="margin-bottom: 0.4rem;">
+            <span class="badge badge-prop">Propuesta Operativa</span>
+          </div>
+          <h3>${p.title}</h3>
+          <div class="pilot-meta">
+            <div><strong>Tecnología vinculada:</strong> ${p.techRelated}</div>
+            <div><strong>Responsable:</strong> ${p.owner}</div>
+            <div style="margin-top:0.3rem;"><strong>Insumos requeridos:</strong> ${p.inputs}</div>
+          </div>
+          <div style="font-size: 0.88rem; font-weight: 700; margin-bottom: 0.3rem;">Pasos de ejecución controlada:</div>
+          <ol class="pilot-steps">
+            ${p.steps.map(s => `<li>${s}</li>`).join("")}
+          </ol>
+          <div style="font-size: 0.86rem; margin-bottom: 0.75rem;">
+            <strong>Indicador de éxito:</strong> ${p.successMetric}
+          </div>
+          <div class="pilot-limit">
+            <strong>Límite y Regla de Control:</strong> ${p.limitWarning}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    // 6. Renderizar Glosario y Fuentes
+    function renderGlossary(filterText = "") {
+      const container = document.getElementById("glossary-container");
+      const q = filterText.trim().toLowerCase();
+
+      const items = APP_DATA.glossary.filter(g =>
+        q === "" || g.term.toLowerCase().includes(q) || g.definition.toLowerCase().includes(q)
+      );
+
+      if (items.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.9rem;">No hay términos en el glosario que coincidan con "${filterText}".</p>`;
+        return;
+      }
+
+      container.innerHTML = items.map(g => `
+        <div class="glossary-item">
+          <dt>${g.term}</dt>
+          <dd>${g.definition}</dd>
+        </div>
+      `).join("");
+    }
+
+    function renderReferences() {
+      const container = document.getElementById("references-container");
+      container.innerHTML = `
+        <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.9rem;">
+          ${APP_DATA.references.map(r => `
+            <li>
+              <span class="badge badge-neutral" style="margin-right: 0.4rem;">${r.type}</span>
+              <strong>${r.citation}</strong><br>
+              <span style="color: var(--text-secondary);">${r.detail}</span><br>
+              <a href="${r.url}" target="_blank" rel="noopener noreferrer">${r.url} ↗</a>
+            </li>
+          `).join("")}
+        </ul>
+      `;
+    }
+
+    // 7. Inicialización y Eventos de Teclado/Interfaz
+    function resetAllFilters() {
+      state.searchQuery = "";
+      state.selectedTech = "ALL";
+      state.selectedStage = "ALL";
+      state.selectedAdoption = "ALL";
+
+      document.getElementById("search-input").value = "";
+      document.getElementById("filter-tech").value = "ALL";
+      document.getElementById("filter-stage").value = "ALL";
+      document.getElementById("filter-adoption").value = "ALL";
+
+      renderTechCards();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderEpistemology();
+      populateTechSelect();
+      renderTechCards();
+      renderComparisonTable();
+      renderPilots();
+      renderGlossary();
+      renderReferences();
+
+      // Eventos de filtros
+      document.getElementById("search-input").addEventListener("input", e => {
+        state.searchQuery = e.target.value;
+        renderTechCards();
+      });
+
+      document.getElementById("filter-tech").addEventListener("change", e => {
+        state.selectedTech = e.target.value;
+        renderTechCards();
+      });
+
+      document.getElementById("filter-stage").addEventListener("change", e => {
+        state.selectedStage = e.target.value;
+        renderTechCards();
+      });
+
+      document.getElementById("filter-adoption").addEventListener("change", e => {
+        state.selectedAdoption = e.target.value;
+        renderTechCards();
+      });
+
+      document.getElementById("btn-reset-filters").addEventListener("click", resetAllFilters);
+      document.getElementById("btn-empty-reset").addEventListener("click", resetAllFilters);
+
+      // Expandir / contraer detalles
+      document.getElementById("btn-expand-all").addEventListener("click", () => {
+        document.querySelectorAll("details.tech-details").forEach(d => d.open = true);
+      });
+
+      document.getElementById("btn-collapse-all").addEventListener("click", () => {
+        document.querySelectorAll("details.tech-details").forEach(d => d.open = false);
+      });
+
+      // Limpiar comparador
+      document.getElementById("btn-clear-compare").addEventListener("click", () => {
+        state.compareList = [];
+        renderTechCards();
+        renderComparisonTable();
+      });
+
+      // Filtro del glosario
+      document.getElementById("glossary-search").addEventListener("input", e => {
+        renderGlossary(e.target.value);
+      });
+
+      // Atajo de teclado: Escape limpia el buscador activo si tiene foco
+      document.addEventListener("keydown", e => {
+        if (e.key === "Escape") {
+          const active = document.activeElement;
+          if (active && active.id === "search-input" && active.value !== "") {
+            resetAllFilters();
+          } else if (active && active.id === "glossary-search" && active.value !== "") {
+            active.value = "";
+            renderGlossary("");
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
